@@ -8,8 +8,8 @@ app.use(express.json());
 app.use('/', router);
 
 //handlerError
-app.use((err, req, res) => {
-  console.log('------->>>>>>', err.message);
+app.use((err, req, res, next) => {
+  console.log('----in handlerError--->>>>>>', err.message);
   res.status(501).send(err.message);
 });
 

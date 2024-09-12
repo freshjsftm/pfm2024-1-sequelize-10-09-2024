@@ -5,11 +5,12 @@ module.exports.createUser = async (req, res, next) => {
   try {
     const { body } = req;
     const newUser = await User.create(body);
-    //console.log(newUser);
+    console.log(newUser);
     if (newUser) {
       return res.status(201).send({ data: newUser });
     }
   } catch (error) {
+    console.log('---in controller---->>>>>>', error.message);
     next(error);
   }
 };
