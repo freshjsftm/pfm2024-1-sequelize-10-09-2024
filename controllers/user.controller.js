@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op } = require('sequelize');
 const { User } = require('../models');
 
 module.exports.createUser = async (req, res, next) => {
@@ -25,7 +25,7 @@ module.exports.findAllUsers = async (req, res, next) => {
       //   }
       // },
       attributes: {
-        exclude: ['password','createdAt','updatedAt']
+        exclude: ['password', 'createdAt', 'updatedAt'],
       },
       // order: [['firstName', 'DESC'], ['id', 'DESC']]
     });
@@ -35,6 +35,17 @@ module.exports.findAllUsers = async (req, res, next) => {
   }
 };
 
+module.exports.findUserByPk = async (req, res, next) => {
+  try {
+    const {
+      params: { userId },
+    } = req;
+    const user = await User.findByPk(userId);
+    res.status(200).send({ data: user });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // module.exports.nameMethod = async (req, res, next) => {
 //   try {
