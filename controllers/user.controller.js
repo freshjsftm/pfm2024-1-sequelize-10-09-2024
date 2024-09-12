@@ -47,6 +47,23 @@ module.exports.findUserByPk = async (req, res, next) => {
   }
 };
 
+module.exports.deleteUserByPk = async (req, res, next) => {
+  try {
+    const {
+      params: { userId },
+    } = req;
+    const userInstance = await User.findByPk(userId);
+    const result = await userInstance.destroy();
+    // const delUser = await User.destroy({
+    //   where: { id: userId },
+    // });  
+    // delUser - кількість видалених рядків
+    res.status(200).send({ data: userInstance });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // module.exports.nameMethod = async (req, res, next) => {
 //   try {
 //   } catch (error) {
