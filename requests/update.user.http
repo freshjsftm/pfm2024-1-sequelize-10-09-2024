@@ -2,7 +2,8 @@ PATCH  http://localhost:3000/users/9 HTTP/1.1
 Content-Type: application/json
 
 {    
-  "lastName":"Travolta",
-  "email":"pitt_99@gmail.com",
-  "birthday":"1995-02-08"
+  "firstName":"Anna",
+  "lastName":"Rot",
+  "email":"pitt_44@gmail.com",
+  "isMale":false
 }

@@ -17,6 +17,7 @@ module.exports.createUser = async (req, res, next) => {
 
 module.exports.findAllUsers = async (req, res, next) => {
   try {
+    // query -> where
     const allUsers = await User.findAll({
       //where: {'isMale': false},
       // where:{
@@ -70,6 +71,11 @@ module.exports.updateUserByPkStatic = async (req, res, next) => {
       params: { userId },
       body,
     } = req;
+    const [,[updatedUser]] = await User.update(body, {
+      where: { id: userId },
+      returning: true,
+    });
+    res.status(200).send({ data: updatedUser });
   } catch (error) {
     next(error);
   }
