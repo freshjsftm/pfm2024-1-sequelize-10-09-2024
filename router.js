@@ -4,6 +4,7 @@ const {
   findAllUsers,
   findUserByPk,
   deleteUserByPk,
+  updateUserByPkInstance
 } = require('./controllers/user.controller');
 
 const router = Router();
@@ -14,5 +15,7 @@ router.get('/users', findAllUsers);
 
 router.get('/users/:userId', findUserByPk);
 router.delete('/users/:userId', deleteUserByPk);
+router.patch('/users/:userId', updateUserByPkInstance);
+// router.patch('/users/:userId', updateUserByPkStatic);
 
 module.exports = router;

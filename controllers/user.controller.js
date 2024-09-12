@@ -56,9 +56,34 @@ module.exports.deleteUserByPk = async (req, res, next) => {
     const result = await userInstance.destroy();
     // const delUser = await User.destroy({
     //   where: { id: userId },
-    // });  
+    // });
     // delUser - кількість видалених рядків
     res.status(200).send({ data: userInstance });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.updateUserByPkStatic = async (req, res, next) => {
+  try {
+    const {
+      params: { userId },
+      body,
+    } = req;
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.updateUserByPkInstance = async (req, res, next) => {
+  try {
+    const {
+      params: { userId },
+      body,
+    } = req;
+    const userInstance = await User.findByPk(userId);
+    const updatedUser = await userInstance.update(body);
+    res.status(200).send({ data: updatedUser });
   } catch (error) {
     next(error);
   }
