@@ -7,6 +7,7 @@ const {
   updateUserByPkInstance,
   updateUserByPkStatic
 } = require('./controllers/user.controller');
+const { createTask } = require('./controllers/task.controller');
 
 const router = Router();
 
@@ -18,5 +19,9 @@ router.get('/users/:userId', findUserByPk);
 router.delete('/users/:userId', deleteUserByPk);
 // router.patch('/users/:userId', updateUserByPkInstance);
 router.patch('/users/:userId', updateUserByPkStatic);
+
+
+router.post('/users/:userId/tasks', createTask);
+
 
 module.exports = router;
