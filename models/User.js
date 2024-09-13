@@ -47,17 +47,20 @@ module.exports = (sequelize, DataTypes) => {
         field: 'password_hash',
         allowNull: false,
         type: DataTypes.TEXT,
+        set(value) {
+          this.setDataValue('password', 'hash_password_' + value);
+        },
       },
       birthday: {
         allowNull: false,
         type: DataTypes.DATEONLY,
         validate: {
           isDate: true,
-          isValidDate(value){
+          isValidDate(value) {
             if (isBefore(new Date(), new Date(value))) {
               throw new Error('Error: check birthday');
             }
-          }
+          },
         },
       },
       isMale: {
