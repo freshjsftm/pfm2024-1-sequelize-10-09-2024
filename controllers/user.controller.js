@@ -10,25 +10,16 @@ module.exports.createUser = async (req, res, next) => {
       return res.status(201).send({ data: newUser });
     }
   } catch (error) {
-    console.log('---in controller---->>>>>>', error.message);
     next(error);
   }
 };
 
 module.exports.findAllUsers = async (req, res, next) => {
   try {
-    // query -> where
     const allUsers = await User.findAll({
-      //where: {'isMale': false},
-      // where:{
-      //   'id':{
-      //     [Op.lt]:10
-      //   }
-      // },
       attributes: {
         exclude: ['password', 'createdAt', 'updatedAt'],
       },
-      // order: [['firstName', 'DESC'], ['id', 'DESC']]
     });
     res.status(200).send({ data: allUsers });
   } catch (error) {
@@ -38,11 +29,9 @@ module.exports.findAllUsers = async (req, res, next) => {
 
 module.exports.findUserByPk = async (req, res, next) => {
   try {
-    const {
-      params: { userId },
-    } = req;
-    const user = await User.findByPk(userId);
-    res.status(200).send({ data: user });
+    const { userInstance } = req;
+    userInstance.password = undefined;
+    res.status(200).send({ data: userInstance });
   } catch (error) {
     next(error);
   }
@@ -50,16 +39,19 @@ module.exports.findUserByPk = async (req, res, next) => {
 
 module.exports.deleteUserByPk = async (req, res, next) => {
   try {
-    const {
-      params: { userId },
-    } = req;
-    const userInstance = await User.findByPk(userId);
+    const { userInstance } = req;
     const result = await userInstance.destroy();
-    // const delUser = await User.destroy({
-    //   where: { id: userId },
-    // });
-    // delUser - кількість видалених рядків
     res.status(200).send({ data: userInstance });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.updateUserByPk = async (req, res, next) => {
+  try {
+    const { userInstance, body } = req;
+    const updatedUser = await userInstance.update(body);
+    res.status(200).send({ data: updatedUser });
   } catch (error) {
     next(error);
   }
@@ -71,24 +63,10 @@ module.exports.updateUserByPkStatic = async (req, res, next) => {
       params: { userId },
       body,
     } = req;
-    const [,[updatedUser]] = await User.update(body, {
+    const [, [updatedUser]] = await User.update(body, {
       where: { id: userId },
       returning: true,
     });
-    res.status(200).send({ data: updatedUser });
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports.updateUserByPkInstance = async (req, res, next) => {
-  try {
-    const {
-      params: { userId },
-      body,
-    } = req;
-    const userInstance = await User.findByPk(userId);
-    const updatedUser = await userInstance.update(body);
     res.status(200).send({ data: updatedUser });
   } catch (error) {
     next(error);

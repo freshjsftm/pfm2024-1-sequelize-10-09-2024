@@ -10,7 +10,7 @@ app.use('/', router);
 //handlerError
 app.use((err, req, res, next) => {
   console.log('----in handlerError--->>>>>>', err.message);
-  res.status(501).send(err.message);
+  res.status(500).send(err.message);
 });
 
 module.exports = app;
