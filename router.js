@@ -6,7 +6,7 @@ const {
   deleteUserByPk,
   updateUserByPk,
 } = require('./controllers/user.controller');
-const { createTask, findAllTasks } = require('./controllers/task.controller');
+const { createTask, findAllTasks, updateTask } = require('./controllers/task.controller');
 const { checkUser } = require('./middlewares/user.mw');
 
 const router = Router();
@@ -27,5 +27,7 @@ router
 router.post('/users/:userId/tasks', checkUser, createTask);
 router.get('/users/:userId/tasks', checkUser, findAllTasks);
 //router.get('/users/:userId/tasks/:taskId', checkUser, findTask);
+
+router.patch('/users/:userId/tasks/:taskId', checkUser, updateTask);
 
 module.exports = router;
