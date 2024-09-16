@@ -22,21 +22,28 @@ module.exports.findAllTasks = async (req, res, next) => {
 
 module.exports.updateTask = async (req, res, next) => {
   try {
-    const {
-      userInstance,
-      params: { taskId },
-      body,
-    } = req;
-    // const result = await userInstance.hasTasks(taskId);
-    // console.log(result);
-    const [taskInstance] = await userInstance.getTasks({
-      where: { id: taskId },
-    });
-    if (!taskInstance) {
-      throw new Error('task not found');
-    }
+    const { taskInstance, body } = req;
     const task = await taskInstance.update(body);
     res.status(200).send({ data: task });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.findTask = async (req, res, next) => {
+  try {
+    const { taskInstance } = req;
+    res.status(200).send({ data: taskInstance });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.deleteTask = async (req, res, next) => {
+  try {
+    const { taskInstance } = req;
+    await taskInstance.destroy();
+    res.status(200).send({ data: taskInstance });
   } catch (error) {
     next(error);
   }
