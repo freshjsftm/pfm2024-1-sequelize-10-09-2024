@@ -16,10 +16,12 @@ module.exports.createUser = async (req, res, next) => {
 
 module.exports.findAllUsers = async (req, res, next) => {
   try {
+    const { pagination } = req;
     const allUsers = await User.findAll({
       attributes: {
         exclude: ['password', 'createdAt', 'updatedAt'],
       },
+      ...pagination,
     });
     res.status(200).send({ data: allUsers });
   } catch (error) {
