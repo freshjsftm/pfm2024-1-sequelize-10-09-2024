@@ -1,14 +1,15 @@
 const { Op } = require('sequelize');
+const createError = require('http-errors');
 const { User } = require('../models');
 
 module.exports.createUser = async (req, res, next) => {
   try {
     const { body } = req;
-    const newUser = await User.create(body);
-    console.log(newUser);
-    if (newUser) {
-      return res.status(201).send({ data: newUser });
+    const newUser = await User.create(body);    
+    if (!newUser) {
+      return next(createError(400,'Fix data'));
     }
+    res.status(201).send({ data: newUser });
   } catch (error) {
     next(error);
   }
@@ -53,6 +54,9 @@ module.exports.updateUserByPk = async (req, res, next) => {
   try {
     const { userInstance, body } = req;
     const updatedUser = await userInstance.update(body);
+    if (!updatedUser) {
+      return next(createError(400,'Fix data'));
+    }
     res.status(200).send({ data: updatedUser });
   } catch (error) {
     next(error);
@@ -69,6 +73,9 @@ module.exports.updateUserByPkStatic = async (req, res, next) => {
       where: { id: userId },
       returning: true,
     });
+    if (!updatedUser) {
+      return next(createError(400,'Fix data'));
+    }
     res.status(200).send({ data: updatedUser });
   } catch (error) {
     next(error);

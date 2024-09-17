@@ -1,3 +1,4 @@
+const createError = require('http-errors');
 module.exports.checkTask = async (req, res, next) => {
   try {
     const {
@@ -8,7 +9,7 @@ module.exports.checkTask = async (req, res, next) => {
       where: { id: taskId },
     });
     if (!taskInstance) {
-      throw new Error('task not found');
+      return next(createError(404,'Task not found'));
     }
     req.taskInstance = taskInstance;
     next();

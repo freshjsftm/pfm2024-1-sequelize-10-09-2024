@@ -1,5 +1,6 @@
 const express = require('express');
 const router = require('./routes');
+const { handleErrors } = require('./handleErrors');
 const app = express();
 
 app.use(express.json());
@@ -8,9 +9,6 @@ app.use(express.json());
 app.use('/', router);
 
 //handlerError
-app.use((err, req, res, next) => {
-  console.log('----in handlerError--->>>>>>', err.message);
-  res.status(500).send(err.message);
-});
+app.use(handleErrors);
 
 module.exports = app;
