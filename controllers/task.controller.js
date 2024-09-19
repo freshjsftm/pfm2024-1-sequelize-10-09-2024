@@ -1,9 +1,12 @@
+const _ = require('lodash');
 const { Task } = require('../models');
+const attrs = ['content', 'deadline', 'isDone'];
 
 module.exports.createTask = async (req, res, next) => {
   try {
     const { body, userInstance } = req;
-    const newTask = await userInstance.createTask(body);
+    const values = _.pick(body, attrs);
+    const newTask = await userInstance.createTask(values);
     res.status(201).send({ data: newTask });
   } catch (error) {
     next(error);
@@ -23,7 +26,8 @@ module.exports.findAllTasks = async (req, res, next) => {
 module.exports.updateTask = async (req, res, next) => {
   try {
     const { taskInstance, body } = req;
-    const task = await taskInstance.update(body);
+    const values = _.pick(body, attrs);
+    const task = await taskInstance.update(values);
     res.status(200).send({ data: task });
   } catch (error) {
     next(error);

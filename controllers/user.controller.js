@@ -1,13 +1,23 @@
 const { Op } = require('sequelize');
 const createError = require('http-errors');
+const _ = require('lodash');
 const { User } = require('../models');
+const attrs = [
+  'firstName',
+  'lastName',
+  'email',
+  'password',
+  'birthday',
+  'isMale',
+];
 
 module.exports.createUser = async (req, res, next) => {
   try {
     const { body } = req;
-    const newUser = await User.create(body);    
+    const values = _.pick(body, attrs);
+    const newUser = await User.create(values);
     if (!newUser) {
-      return next(createError(400,'Fix data'));
+      return next(createError(400, 'Fix data'));
     }
     res.status(201).send({ data: newUser });
   } catch (error) {
@@ -53,9 +63,10 @@ module.exports.deleteUserByPk = async (req, res, next) => {
 module.exports.updateUserByPk = async (req, res, next) => {
   try {
     const { userInstance, body } = req;
-    const updatedUser = await userInstance.update(body);
+    const values = _.pick(body, attrs);
+    const updatedUser = await userInstance.update(values);
     if (!updatedUser) {
-      return next(createError(400,'Fix data'));
+      return next(createError(400, 'Fix data'));
     }
     res.status(200).send({ data: updatedUser });
   } catch (error) {
@@ -69,12 +80,13 @@ module.exports.updateUserByPkStatic = async (req, res, next) => {
       params: { userId },
       body,
     } = req;
-    const [, [updatedUser]] = await User.update(body, {
+    const values = _.pick(body, attrs);
+    const [, [updatedUser]] = await User.update(values, {
       where: { id: userId },
       returning: true,
     });
     if (!updatedUser) {
-      return next(createError(400,'Fix data'));
+      return next(createError(400, 'Fix data'));
     }
     res.status(200).send({ data: updatedUser });
   } catch (error) {
