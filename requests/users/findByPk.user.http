@@ -1,1 +1,1 @@
-GET http://localhost:3000/users/300 HTTP/1.1
+GET http://localhost:3000/users/30 HTTP/1.1

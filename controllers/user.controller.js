@@ -19,6 +19,7 @@ module.exports.createUser = async (req, res, next) => {
     if (!newUser) {
       return next(createError(400, 'Fix data'));
     }
+    newUser.dataValues.password = undefined;
     res.status(201).send({ data: newUser });
   } catch (error) {
     next(error);
@@ -43,7 +44,7 @@ module.exports.findAllUsers = async (req, res, next) => {
 module.exports.findUserByPk = async (req, res, next) => {
   try {
     const { userInstance } = req;
-    userInstance.password = undefined;
+    userInstance.dataValues.password = undefined;
     res.status(200).send({ data: userInstance });
   } catch (error) {
     next(error);
@@ -53,6 +54,7 @@ module.exports.findUserByPk = async (req, res, next) => {
 module.exports.deleteUserByPk = async (req, res, next) => {
   try {
     const { userInstance } = req;
+    userInstance.dataValues.password = undefined;
     const result = await userInstance.destroy();
     res.status(200).send({ data: userInstance });
   } catch (error) {
@@ -68,6 +70,7 @@ module.exports.updateUserByPk = async (req, res, next) => {
     if (!updatedUser) {
       return next(createError(400, 'Fix data'));
     }
+    updatedUser.dataValues.password = undefined;
     res.status(200).send({ data: updatedUser });
   } catch (error) {
     next(error);
@@ -88,15 +91,9 @@ module.exports.updateUserByPkStatic = async (req, res, next) => {
     if (!updatedUser) {
       return next(createError(400, 'Fix data'));
     }
+    updatedUser.dataValues.password = undefined;
     res.status(200).send({ data: updatedUser });
   } catch (error) {
     next(error);
   }
 };
-
-// module.exports.nameMethod = async (req, res, next) => {
-//   try {
-//   } catch (error) {
-//     next(error);
-//   }
-// };
