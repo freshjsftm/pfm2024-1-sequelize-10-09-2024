@@ -22,8 +22,11 @@ module.exports.updateGroup = async (req, res, next) => {
 
 module.exports.createGroup = async (req, res, next) => {
   try {
-    const { body, userInstance } = req;
-    const values = _.pick(body, attrs);
+    const { body, userInstance, file } = req;
+    let values = _.pick(body, attrs);
+    if (file) {
+      values = { ...values, imagePath: file.filename };
+    }
     const newGroup = await userInstance.createGroup(values);
     if (!newGroup) {
       return next(createError(400, 'Fix group data '));
