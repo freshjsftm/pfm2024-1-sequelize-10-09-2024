@@ -1,6 +1,7 @@
 const path = require('path');
 const multer = require('multer');
 const { IMAGE_PATH } = require('../constants');
+const mimetypes = ['image/png', 'image/jpeg'];
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -11,6 +12,17 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const fileFilter = (req, file, cb) => {
+  if (mimetypes.includes(file.mimetype) === false) {
+    return cb(new Error('Wrong type file'));
+  }
+  cb(null, true);
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 }, //5Mb
+});
 
 module.exports.singleUpload = (fieldName) => upload.single(fieldName);
