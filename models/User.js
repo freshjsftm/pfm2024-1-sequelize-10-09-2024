@@ -5,12 +5,12 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       User.hasMany(models.Task, {
-        foreignKey: 'userId'
+        foreignKey: 'userId',
       });
       User.belongsToMany(models.Group, {
         through: 'users_to_groups',
-        foreignKey: 'userId'
-      })
+        foreignKey: 'userId',
+      });
     }
   }
   User.init(
@@ -67,6 +67,12 @@ module.exports = (sequelize, DataTypes) => {
         field: 'is_male',
         allowNull: false,
         type: DataTypes.BOOLEAN,
+      },
+      avatar: {
+        type: DataTypes.TEXT,
+        validate: {
+          notEmpty: true,
+        },
       },
     },
     {

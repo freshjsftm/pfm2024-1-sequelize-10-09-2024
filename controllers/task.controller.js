@@ -1,11 +1,16 @@
 const _ = require('lodash');
 const { Task } = require('../models');
+const LimitTasksError = require('../errors/LimitTasksError');
 const attrs = ['content', 'deadline', 'isDone'];
 
 module.exports.createTask = async (req, res, next) => {
   try {
     const { body, userInstance } = req;
     const values = _.pick(body, attrs);
+    const amount = await userInstance.countTasks();
+    if(amount>=10){
+      return next(new LimitTasksError('Error!!!!! limit tasks reached!!!!!!!!'))
+    }
     const newTask = await userInstance.createTask(values);
     res.status(201).send({ data: newTask });
   } catch (error) {

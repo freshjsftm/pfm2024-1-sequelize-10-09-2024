@@ -9,12 +9,16 @@ const attrs = [
   'password',
   'birthday',
   'isMale',
+  'avatar'
 ];
 
 module.exports.createUser = async (req, res, next) => {
   try {
-    const { body } = req;
-    const values = _.pick(body, attrs);
+    const { body, file } = req;
+    let values = _.pick(body, attrs);
+    if(file){
+      values = { ...values, avatar: file.filename };
+    }
     const newUser = await User.create(values);
     if (!newUser) {
       return next(createError(400, 'Fix data'));
@@ -64,8 +68,11 @@ module.exports.deleteUserByPk = async (req, res, next) => {
 
 module.exports.updateUserByPk = async (req, res, next) => {
   try {
-    const { userInstance, body } = req;
-    const values = _.pick(body, attrs);
+    const { userInstance, body, file } = req;
+    let values = _.pick(body, attrs);
+    if(file){
+      values = { ...values, avatar: file.filename };
+    }
     const updatedUser = await userInstance.update(values);
     if (!updatedUser) {
       return next(createError(400, 'Fix data'));
@@ -77,6 +84,8 @@ module.exports.updateUserByPk = async (req, res, next) => {
   }
 };
 
+
+/// -----  not use
 module.exports.updateUserByPkStatic = async (req, res, next) => {
   try {
     const {
